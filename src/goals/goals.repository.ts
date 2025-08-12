@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { Goal } from './goal.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { GoalDefaultData } from 'src/models/Goal';
+import { SubGoal } from 'src/models/SubGoal';
+import { Goal } from './goal.schema';
 
 @Injectable()
 export class GoalsRepository {
@@ -15,6 +16,22 @@ export class GoalsRepository {
   createDefaultGoal(goalData: GoalDefaultData) {
     const goal = new this.goalModel(goalData);
 
-    return goal.save()
+    return goal.save();
+  }
+
+  deleteGoal(goalId: string) {
+    return this.goalModel.findOneAndDelete({ id: goalId }).exec();
+  }
+
+  async addSubGoal(goalId: string, subGoal: SubGoal) {
+    const parentGoal = await this.goalModel.findOne({ id: goalId }).exec();
+
+    if (!parentGoal) {
+      throw new Error('No parent goal found.');
+    }
+
+    parentGoal.subGoals.push(subGoal);
+
+    return parentGoal.save();
   }
 }

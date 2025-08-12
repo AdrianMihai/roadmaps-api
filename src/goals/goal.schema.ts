@@ -13,7 +13,7 @@ export class Goal {
 
   @Prop({
     enum: {
-      values: GoalPriority,
+      values: Object.values(GoalPriority),
       message: 'Priority {VALUE} is not supported',
     },
   })
@@ -22,7 +22,7 @@ export class Goal {
   @Prop()
   dueBy: string;
 
-  @Prop()
+  @Prop([SubGoal])
   subGoals: SubGoal[];
 
   roadmapAnalysis: string;
