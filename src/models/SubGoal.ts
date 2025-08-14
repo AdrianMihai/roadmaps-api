@@ -8,7 +8,7 @@ export class SubGoal {
 }
 
 export const createSubGoal = (data: Record<string, any>): SubGoal => {
-  if (!isEmptyString(data.id)) {
+  if (isEmptyString(data.id)) {
     throw new Error('Missing sub-goal id.');
   }
 
