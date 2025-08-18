@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { GoalDefaultData } from 'src/models/Goal';
 import { SubGoal } from 'src/models/SubGoal';
 import { Goal } from './goal.schema';
+import { GoalUpdateData } from './goalValidator';
 
 @Injectable()
 export class GoalsRepository {
@@ -21,6 +22,10 @@ export class GoalsRepository {
 
   deleteGoal(goalId: string) {
     return this.goalModel.findOneAndDelete({ id: goalId }).exec();
+  }
+
+  updateGoal(goalId: string, updateData: GoalUpdateData) {
+    return this.goalModel.findOneAndUpdate({ id: goalId }, updateData, { returnDocument: 'after' }).exec();
   }
 
   async addSubGoal(goalId: string, subGoal: SubGoal) {

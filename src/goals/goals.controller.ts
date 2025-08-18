@@ -1,7 +1,8 @@
-import { Controller, Delete, Get, Param, Post, Req, Res } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Post, Put, Req, Res } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { createSubGoal } from 'src/models/SubGoal';
 import { GoalsRepository } from './goals.repository';
+import { getGoalUpdateData } from './goalValidator';
 
 @Controller('goals')
 export class GoalsController {
@@ -28,6 +29,21 @@ export class GoalsController {
     const result = await this.goalsRepository.deleteGoal(params.goalId);
 
     return response.status(200).send(result);
+  }
+
+  @Put(':goalId')
+  async updateGoal(@Param() params: any, @Res() response: Response, @Req() request: Request) {
+    if (!params.goalId) {
+      return response.status(400).send('Missing goal id.');
+    }
+
+    try {
+      const resultingGoal = await this.goalsRepository.updateGoal(params.goalId, getGoalUpdateData(request.body));
+
+      response.status(200).send(resultingGoal);
+    } catch (e) {
+      response.status(400).send(e.message);
+    }
   }
 
   @Post(':goalId/add-subGoal')

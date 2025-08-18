@@ -25,7 +25,8 @@ export class Goal {
   @Prop([SubGoal])
   subGoals: SubGoal[];
 
-  roadmapAnalysis: string;
+  @Prop()
+  roadmapAnalysis?: string;
 }
 
 export type GoalDocument = HydratedDocument<Goal>;
