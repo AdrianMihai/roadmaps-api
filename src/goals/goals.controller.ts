@@ -1,18 +1,21 @@
-import { Controller, Delete, Get, Param, Post, Put, Req, Res } from '@nestjs/common';
+import { Controller, Delete, Get, Param, Post, Put, Req, Res, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { createSubGoal } from 'src/models/SubGoal';
 import { GoalsRepository } from './goals.repository';
 import { getGoalUpdateData } from './goalValidator';
+import { AuthGuard } from 'src/auth/AuthGuard';
 
 @Controller('goals')
 export class GoalsController {
   constructor(private readonly goalsRepository: GoalsRepository) {}
 
+  @UseGuards(AuthGuard)
   @Get()
   findAll() {
     return this.goalsRepository.findAll();
   }
 
+  @UseGuards(AuthGuard)
   @Post()
   async insertGoal(@Req() request: Request) {
     const goal = await this.goalsRepository.createDefaultGoal(request.body);
@@ -20,6 +23,7 @@ export class GoalsController {
     return goal;
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':goalId')
   async deleteGoal(@Param() params: any, @Res() response: Response) {
     if (!params.goalId) {
@@ -31,6 +35,7 @@ export class GoalsController {
     return response.status(200).send(result);
   }
 
+  @UseGuards(AuthGuard)
   @Put(':goalId')
   async updateGoal(@Param() params: any, @Res() response: Response, @Req() request: Request) {
     if (!params.goalId) {
@@ -46,6 +51,7 @@ export class GoalsController {
     }
   }
 
+  @UseGuards(AuthGuard)
   @Post(':goalId/add-subGoal')
   async addSubGoal(@Param() params: any, @Res() response: Response, @Req() request: Request) {
     if (!params.goalId) {
