@@ -8,16 +8,16 @@ export class SessionRepository {
   constructor(@InjectModel(Session.name) private readonly sessionModel: Model<Session>) {}
 
   getSession(sessionId: string) {
-    return this.sessionModel.findOne({ id: sessionId }).exec();
+    return this.sessionModel.findOne({ id: sessionId }).populate('userData').exec();
   }
 
   async setSession(sessionId: string, sessionData: any) {
     let session = await this.sessionModel.findOne({ id: sessionId }).exec();
 
     if (!session) {
-      session = new this.sessionModel({ id: sessionId, ...sessionData });
+      session = new this.sessionModel({ id: sessionId, ...sessionData, userData: sessionData.userData._id });
     } else {
-      session.updateOne({ ...sessionData, createdAt: Date.now() });
+      session.updateOne({ ...sessionData, ...sessionData, userData: sessionData.userData._id, createdAt: Date.now() });
       session.markModified('createdAt');
     }
 

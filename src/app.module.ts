@@ -6,9 +6,10 @@ import { GoalsModule } from './goals/goals.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from './config/config.module';
 import { SessionModule } from './session/session.module';
+import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [MongooseModule.forRoot('mongodb://127.0.0.1:27017/RoadmapsDB'), GoalsModule, AuthModule, ConfigModule, SessionModule],
+  imports: [MongooseModule.forRoot('mongodb://127.0.0.1:27017/RoadmapsDB'), GoalsModule, AuthModule, ConfigModule, SessionModule, UserModule],
   controllers: [AppController],
   providers: [AppService],
 })
