@@ -34,7 +34,6 @@ export class AuthController {
         return;
       }
 
-      console.log(e.code);
       response.status(parseInt(e.code)).json(e.message);
     }
   }

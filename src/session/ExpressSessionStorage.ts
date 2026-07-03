@@ -23,8 +23,6 @@ export class ExpressSessionStorage extends session.Store {
     try {
       const sessionDocument = await this.sessionRepository.getSession(sessionId);
 
-      console.log(sessionId, sessionDocument);
-
       callback(null, sessionDocument);
 
       return sessionDocument;
